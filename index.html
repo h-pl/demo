@@ -136,12 +136,20 @@
             scrollbar-width: none;
             /* Hides scrollbar for Firefox */
         }
+
+        a {
+            text-decoration: none;
+            /* 去掉下划线 */
+            /* color: inherit; */
+            /* 保持父元素的字体颜色 */
+        }
     </style>
 </head>
 
 <body>
     <div class="container">
         <!-- Cards with data-src for lazy loading -->
+        <a href="https://h-pl.github.io/demo/%E6%BB%9A%E5%8A%A8%E8%BD%AE%E6%92%AD/" target="_blank">
         <div class="card" data-src="https://h-pl.github.io/demo/%E6%BB%9A%E5%8A%A8%E8%BD%AE%E6%92%AD/">
             <img data-src="https://via.placeholder.com/400x250" alt="Card Image 1">
             <div class="card-content">
@@ -149,6 +157,7 @@
                 <p>用于BI看板的告警播报等</p>
             </div>
         </div>
+        </a>
 
         <div class="card" data-src="https://example.com/link2">
             <img data-src="https://via.placeholder.com/400x250" alt="Card Image 2">
