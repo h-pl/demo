@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>瀑布流布局</title>
+    <style>
+        /* General body styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            overflow: hidden;
+            /* Hide scrollbars */
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            --top-mask-opacity: 0;
+            /* CSS variable for top mask opacity */
+            --bottom-mask-opacity: 0;
+            /* CSS variable for bottom mask opacity */
+        }
+
+        /* Container styles */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            width: 80%;
+            max-width: 1200px;
+            max-height: 100vh;
+            /* Limit container height */
+            overflow-y: auto;
+            /* Enable vertical scrolling */
+            padding: 16px;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* Hide scrollbars but allow scrolling */
+        .container::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+        }
+
+        /* Fixed gradient masks for top and bottom */
+        body::before,
+        body::after {
+            content: "";
+            position: fixed;
+            /* Fixed position to stay in place */
+            left: 0;
+            width: 100%;
+            height: 50px;
+            /* Height of the gradient mask */
+            pointer-events: none;
+            z-index: 2;
+            /* Ensure masks are above the container */
+            opacity: 0;
+            /* Initially hidden */
+            transition: opacity 0.3s ease;
+        }
+
+        body::before {
+            top: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.2), transparent);
+            opacity: var(--top-mask-opacity, 0);
+            transition: opacity 0.3s ease;
+        }
+
+        body::after {
+            bottom: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.2), transparent);
+            opacity: var(--bottom-mask-opacity, 0);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Card styles */
+        .card {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease, opacity 0.5s ease;
+            opacity: 0;
+            /* Hidden initially for lazy loading */
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+        }
+
+        .card-content {
+            padding: 16px;
+        }
+
+        .card-content h3 {
+            margin: 0 0 8px;
+        }
+
+        .card-content p {
+            margin: 0;
+        }
+
+        .card.loaded {
+            opacity: 1;
+            /* Show card when loaded */
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            filter: brightness(1.05);
+            /* Slightly brighten the card */
+        }
+
+        .card:active {
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hide scrollbars but allow scrolling for different browsers */
+        body::-webkit-scrollbar {
+            width: 0px;
+            height: 0px;
+        }
+
+        body {
+            -ms-overflow-style: none;
+            /* Hides scrollbar for IE and Edge */
+            scrollbar-width: none;
+            /* Hides scrollbar for Firefox */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Cards with data-src for lazy loading -->
+        <div class="card" data-src="https://example.com/link1">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 1">
+            <div class="card-content">
+                <h3>Card Title 1</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+
+        <div class="card" data-src="https://example.com/link2">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 2">
+            <div class="card-content">
+                <h3>Card Title 2</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+        <!-- More cards... -->
+
+
+
+        <div class="card" data-src="https://example.com/link1">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 1">
+            <div class="card-content">
+                <h3>Card Title 1</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+
+        <div class="card" data-src="https://example.com/link2">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 2">
+            <div class="card-content">
+                <h3>Card Title 2</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+        <div class="card" data-src="https://example.com/link1">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 1">
+            <div class="card-content">
+                <h3>Card Title 1</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+
+        <div class="card" data-src="https://example.com/link2">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 2">
+            <div class="card-content">
+                <h3>Card Title 2</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+        <div class="card" data-src="https://example.com/link1">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 1">
+            <div class="card-content">
+                <h3>Card Title 1</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+
+        <div class="card" data-src="https://example.com/link2">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 2">
+            <div class="card-content">
+                <h3>Card Title 2</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+        <div class="card" data-src="https://example.com/link1">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 1">
+            <div class="card-content">
+                <h3>Card Title 1</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+
+        <div class="card" data-src="https://example.com/link2">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 2">
+            <div class="card-content">
+                <h3>Card Title 2</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+        <div class="card" data-src="https://example.com/link1">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 1">
+            <div class="card-content">
+                <h3>Card Title 1</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+
+        <div class="card" data-src="https://example.com/link2">
+            <img data-src="https://via.placeholder.com/400x250" alt="Card Image 2">
+            <div class="card-content">
+                <h3>Card Title 2</h3>
+                <p>Short description or information about this card.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Lazy load function for cards
+        function lazyLoad() {
+            const cards = document.querySelectorAll('.card');
+            const observer = new IntersectionObserver(entries => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const card = entry.target;
+                        const img = card.querySelector('img');
+                        const src = img.getAttribute('data-src');
+                        if (src) {
+                            img.src = src;
+                            card.classList.add('loaded');
+                            card.removeAttribute('data-src');
+                        }
+                        observer.unobserve(card);
+                    }
+                });
+            });
+
+            cards.forEach(card => observer.observe(card));
+        }
+
+        document.addEventListener('scroll', function () {
+            const container = document.querySelector('.container');
+            const containerTop = container.getBoundingClientRect().top;
+            const containerBottom = container.getBoundingClientRect().bottom;
+            const viewportHeight = window.innerHeight;
+
+            const rootStyle = document.documentElement.style;
+
+            // Show or hide the top mask
+            if (containerTop < 0) {
+                rootStyle.setProperty('--top-mask-opacity', '1');
+            } else {
+                rootStyle.setProperty('--top-mask-opacity', '0');
+            }
+
+            // Show or hide the bottom mask
+            if (containerBottom > viewportHeight) {
+                rootStyle.setProperty('--bottom-mask-opacity', '1');
+            } else {
+                rootStyle.setProperty('--bottom-mask-opacity', '0');
+            }
+        });
+
+
+        // Initialize lazy loading when DOM content is loaded
+        document.addEventListener('DOMContentLoaded', lazyLoad);
+    </script>
+</body>
+
+</html>
