@@ -1,4 +1,4 @@
-
+#### 知识库正反馈迭代
 ```mermaid
 flowchart TD
 %%{init: { 'wrap': true, 'wrapPadding': 10, 'fontFamily': 'Arial', 'fontSize': 12 } }%%
@@ -34,5 +34,37 @@ flowchart TD
         P -- 问题不清/用户误解 --> U[记录观察 / Log Observation]
 
         K & R & T & U --> V([处理完成 / Processing Complete])
+    end
+```
+#### 猜你想问、还想问 功能
+
+```mermaid
+flowchart TD
+    subgraph 数据收集与处理
+        A[用户在H5提问] --> B[后台记录提问日志 /问题文本, UserID, 时间戳/]
+        B --> C{定期处理日志 /如每天/每小时/ / Process Logs Periodically}
+        C --> D[数据清洗与标准化 / Clean & Normalize Questions]
+        D --> E{问题频率统计 / Calculate Question Frequency}
+        E --> F[识别高频问题 / Identify High-Frequency Questions]
+        F --> G{问题聚类/语义相似度分析 /可选但推荐/ / Clustering & Semantic Analysis /Optional/}
+        style G fill:#f9f,stroke:#333,stroke-width:2px
+        G -- 聚类结果 --> H[生成高频问题/主题列表 / Generate High-Frequency List //Questions/Topics/]
+        H --> I[存储于缓存/数据库 / Store in Cache/DB]
+    end
+
+    subgraph 功能应用
+        J[用户在H5输入框输入] --> K{触发//猜你想问//}
+        K --> L[前端发送部分输入到后端 / Frontend Sends Partial Input to Backend]
+        L --> M[后端查询高频问题库 /基于前缀或语义匹配/ / Backend Queries High-Freq Store]
+        style M fill:#ccf,stroke:#333,stroke-width:2px
+        M --> N[返回建议列表 / Return Suggestions]
+        N --> O[前端展示建议 / Frontend Displays Suggestions]
+
+        P[LLM返回答案后] --> Q{触发//还想问//}
+        Q --> R[后端根据当前问题查询相关问题 / Backend Finds Related Questions for Current Query]
+        R -- 使用语义相似度 --> S[查询高频问题库 /基于向量相似度/ / Query High-Freq Store /Vector Similarity/]
+        style S fill:#ccf,stroke:#333,stroke-width:2px
+        S --> T[返回相关问题列表 / Return Related Questions]
+        T --> U[前端展示相关问题 / Frontend Displays Related Questions]
     end
 ```
